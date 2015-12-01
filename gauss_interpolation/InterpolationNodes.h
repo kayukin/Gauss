@@ -14,5 +14,6 @@ public:
 	double& operator[](int i);
 	double operator[](int i)const;
 	friend std::ostream& operator<<(std::ostream& os, const InterpolationNodes& IN);
+	int GetSize()const{ return size; }
 };
 

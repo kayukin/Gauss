@@ -5,15 +5,17 @@
 class GaussPolynom
 {
 	InterpolationNodes x;
-	double* deltas;
+	InterpolationNodes* delta;
 	double h;
 	int n;
-	double Delta(const InterpolationNodes& y, int i, int pow);
-	double Q(double q, int m);
-	double Factorial(int n);
+	double Delta(int i, int pow)const;
+	static double Q(double q, int m);
+	static double Factorial(int n);
 public:
 	GaussPolynom(const InterpolationNodes& x, const InterpolationNodes& y, int n);
+	GaussPolynom(const GaussPolynom& GP);
+	GaussPolynom& operator=(const GaussPolynom& GP);
 	~GaussPolynom();
-	double Calculate(double point);
+	double Calculate(double point)const;
 };
 

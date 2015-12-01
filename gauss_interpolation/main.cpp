@@ -5,27 +5,34 @@
 using namespace std;
 
 #define X0 0.5
-#define STEP 0.5
-#define N 5
+#define STEP 2.5
+#define N 30
 #define FUNC abs
 
 
 void GetInterpolationNodes(double(function(double)), double x0, double step, int n, InterpolationNodes &x, InterpolationNodes &y)
 {
-	InterpolationNodes X(n);
-	InterpolationNodes Y(n);
+	x = InterpolationNodes(n);
+	y = InterpolationNodes(n);
 
 	double current = x0 - step*n;
 	for (int i = -n; i < n + 1; i++, current += step)
 	{
-		X[i] = current;
-		Y[i] = function(current);
+		x[i] = current;
+		y[i] = function(current);
 	}
-	x = X;
-	y = Y;
-	cout << x << endl;
-	cout << y << endl;
 }
+
+double AverageError(const InterpolationNodes& x, const InterpolationNodes& y, const GaussPolynom& polynom)
+{
+	double res = 0;
+	for (int i = -x.GetSize(); i < x.GetSize(); i++){
+		res += abs(polynom.Calculate(x[i]) - y[i]);
+	}
+	res /= x.GetSize() * 2;
+	return res;
+}
+
 int main()
 {
 	InterpolationNodes x;
@@ -33,10 +40,9 @@ int main()
 	GetInterpolationNodes(FUNC, X0, STEP, N, x, y);
 
 	GaussPolynom poly(x, y, N);
-	for (double xx = -10; xx < 10; xx += 0.5)
-		cout<<poly.Calculate(xx)<<' ';
-	//printarr(x, N);
-	//printarr(y, N);
+	cout << endl;
+	cout << AverageError(x, y, poly);
+
 
 	system("pause");
 	return 0;
