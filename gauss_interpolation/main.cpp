@@ -4,16 +4,17 @@
 
 using namespace std;
 
-#define X0 0.5
-#define STEP 2.5
-#define N 30
+#define X0 0
+#define STEP 0.5
+#define N 100
 #define FUNC abs
 
+double sqr(double x){ return x*x; }
 
-void GetInterpolationNodes(double(function(double)), double x0, double step, int n, InterpolationNodes &x, InterpolationNodes &y)
+void CreateInterpolationNodes(double(function(double)), double x0, double step, int n, DArray &x, DArray &y)
 {
-	x = InterpolationNodes(n);
-	y = InterpolationNodes(n);
+	x = DArray(n);
+	y = DArray(n);
 
 	double current = x0 - step*n;
 	for (int i = -n; i < n + 1; i++, current += step)
@@ -23,27 +24,31 @@ void GetInterpolationNodes(double(function(double)), double x0, double step, int
 	}
 }
 
-double AverageError(const InterpolationNodes& x, const InterpolationNodes& y, const GaussPolynom& polynom)
+double Error(double actual, double expected)
 {
-	double res = 0;
-	for (int i = -x.GetSize(); i < x.GetSize(); i++){
-		res += abs(polynom.Calculate(x[i]) - y[i]);
-	}
-	res /= x.GetSize() * 2;
-	return res;
+	return abs(actual - expected);
 }
 
 int main()
 {
-	InterpolationNodes x;
-	InterpolationNodes y;
-	GetInterpolationNodes(FUNC, X0, STEP, N, x, y);
+	DArray x;
+	DArray y;
+	CreateInterpolationNodes(FUNC, X0, STEP, N, x, y);
 
 	GaussPolynom poly(x, y, N);
 	cout << endl;
-	cout << AverageError(x, y, poly);
+	for (double i = -10; i < 10; i += 0.5)
+		cout << poly.Calculate(i) << ' ';
 
-
+	cout << endl << "Errors: " << endl;
+	double avgErr = 0;
+	for (double i = -10; i < 10; i += 0.5)
+	{
+		double err = Error(poly.Calculate(i), FUNC(i));
+		cout << err << ' ';
+		avgErr += err;
+	}
+	cout << endl << "Average error: " << avgErr / 20;
 	system("pause");
 	return 0;
 }

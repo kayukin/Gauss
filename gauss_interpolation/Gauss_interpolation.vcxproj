@@ -79,7 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GaussPolynom.cpp" />
-    <ClCompile Include="InterpolationNodes.cpp" />
+    <ClCompile Include="DArray.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -87,7 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GaussPolynom.h" />
-    <ClInclude Include="InterpolationNodes.h" />
+    <ClInclude Include="DArray.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

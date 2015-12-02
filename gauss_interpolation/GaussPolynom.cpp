@@ -29,11 +29,11 @@ double GaussPolynom::Factorial(int n)
 	return n * Factorial(n - 1);
 }
 
-GaussPolynom::GaussPolynom(const InterpolationNodes& theX, const InterpolationNodes& y, int N) :x(N), n(N)
+GaussPolynom::GaussPolynom(const DArray& theX, const DArray& y, int N) :x(N), n(N)
 {
-	delta = new InterpolationNodes[2 * N];
+	delta = new DArray[2 * N];
 	for (int i = 0; i < 2 * N; i++)
-		delta[i] = InterpolationNodes(N);
+		delta[i] = DArray(N);
 	for (int i = -N; i < N; i++) {
 		x[i] = theX[i];
 	}
@@ -57,7 +57,6 @@ double GaussPolynom::Calculate(double point)const
 {
 	double q = (point - x[0]) / h;
 	double result = Delta(0, 0);
-	int k = 1;
 	for (int i = 1; i < n; i++) {
 		result += (Q(q + i - 1, 2 * i - 1) / Factorial(2 * i - 1))*Delta(-(i - 1), 2 * i - 1);
 		result += (Q(q + i - 1, 2 * i) / Factorial(2 * i))*Delta(-i, 2 * i);
@@ -67,10 +66,23 @@ double GaussPolynom::Calculate(double point)const
 
 GaussPolynom::GaussPolynom(const GaussPolynom& GP)
 {
-	h = GP.h;
-	x = GP.x;
+	Copy(GP);
 }
 GaussPolynom& GaussPolynom::operator=(const GaussPolynom& GP)
 {
+	if (this == &GP)
+		return *this;
+	delete[] delta;
+	Copy(GP);
+	return *this;
+}
 
+void GaussPolynom::Copy(const GaussPolynom& GP)
+{
+	h = GP.h;
+	x = GP.x;
+	n = GP.n;
+	delta = new DArray[2 * n];
+	for (int i = 0; i < 2 * n; i++)
+		delta[i] = GP.delta[i];
 }

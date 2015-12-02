@@ -1,18 +1,19 @@
 #pragma once
 #include<iostream>
-#include"InterpolationNodes.h"
+#include"DArray.h"
 
 class GaussPolynom
 {
-	InterpolationNodes x;
-	InterpolationNodes* delta;
+	DArray x;
+	DArray* delta;
 	double h;
 	int n;
 	double Delta(int i, int pow)const;
 	static double Q(double q, int m);
 	static double Factorial(int n);
+	void Copy(const GaussPolynom& GP);
 public:
-	GaussPolynom(const InterpolationNodes& x, const InterpolationNodes& y, int n);
+	GaussPolynom(const DArray& x, const DArray& y, int n);
 	GaussPolynom(const GaussPolynom& GP);
 	GaussPolynom& operator=(const GaussPolynom& GP);
 	~GaussPolynom();
